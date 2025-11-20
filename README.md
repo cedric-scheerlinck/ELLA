@@ -192,6 +192,12 @@ Therefore, it is recommended to use fp16 T5 for inference.
 
 The guideline of DPG-Bench:
 
+```
+uv venv .venv --python 3.10
+source .venv/bin/activate
+uv pip install -r requirements-for-dpg_bench.txt
+```
+
 1. Generate your images according to our [prompts](./dpg_bench/prompts/).
     
     It is recommended to generate 4 images per prompt and grid them to 2x2 format. **Please Make sure your generated image's filename is the same with the prompt's filename.**

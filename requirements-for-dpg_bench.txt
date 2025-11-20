@@ -1,4 +1,7 @@
 accelerate
+addict
+datasets<2.18
+pyarrow<21
 numpy
 pandas
 pillow
@@ -11,7 +14,7 @@ diffusers
 fairseq
 ftfy>=6.0.3
 librosa==0.10.1
-modelscope
+modelscope<1.15
 opencv-python
 # compatible with taming-transformers-rom1504
 rapidfuzz
@@ -26,7 +29,7 @@ tiktoken
 timm
 tokenizers
 torchvision
-transformers
+transformers<4.30
 transformers_stream_generator
 unicodedata2
 zhconv

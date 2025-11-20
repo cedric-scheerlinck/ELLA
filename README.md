@@ -1,5 +1,14 @@
 # ELLA & EMMA
 
+```
+git clone https://github.com/cedric-scheerlinck/ELLA.git
+cd ELLA
+
+uv venv .venv --python 3.10
+source .venv/bin/activate
+uv pip install -r requirements-for-dpg_bench.txt
+```
+
 <table>
   <tr>
     <td>
@@ -191,12 +200,6 @@ Therefore, it is recommended to use fp16 T5 for inference.
 ## 📊 DPG-Bench
 
 The guideline of DPG-Bench:
-
-```
-uv venv .venv --python 3.10
-source .venv/bin/activate
-uv pip install -r requirements-for-dpg_bench.txt
-```
 
 1. Generate your images according to our [prompts](./dpg_bench/prompts/).
     

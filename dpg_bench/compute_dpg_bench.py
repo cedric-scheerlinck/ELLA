@@ -21,11 +21,6 @@ def parse_args():
         default=None,
     )
     parser.add_argument(
-        "--resolution",
-        type=int,
-        default=None,
-    )
-    parser.add_argument(
         "--csv",
         type=str,
         default='./dpg_bench/dpg_bench.csv',
@@ -106,8 +101,15 @@ def crop_image(input_image, crop_tuple=None):
 
     return cropped_image
 
-def compute_dpg_one_sample(args, question_dict, image_path, vqa_model, resolution):
+def compute_dpg_one_sample(args, question_dict, image_path, vqa_model):
     generated_image = Image.open(image_path)
+    width, height = generated_image.size
+    assert width == height, 'Image must be a square'
+    assert width % 2 == 0, 'Image width must be even'
+    resolution = width
+    if args.pic_num > 1:
+        resolution //= 2
+
     crop_tuples_list = [
         (0,0,resolution,resolution),
         (resolution, 0, resolution*2, resolution),
@@ -128,7 +130,10 @@ def compute_dpg_one_sample(args, question_dict, image_path, vqa_model, resolutio
 
     scores = []
     for crop_tuple in crop_tuples:
-        cropped_image = crop_image(generated_image, crop_tuple)
+        if args.pic_num == 1:
+            cropped_image = generated_image
+        else:
+            cropped_image = crop_image(generated_image, crop_tuple)
         for id, question in qid2question.items():
             answer = vqa_model.vqa(cropped_image, question)
             qid2answer[id] = answer
@@ -201,7 +206,7 @@ def main():
         try:
             # compute score of one sample
             score, qid2tuple, qid2scores = compute_dpg_one_sample(
-                args=args, question_dict=question_dict, image_path=image_path, vqa_model=vqa_model, resolution=args.resolution)
+                args=args, question_dict=question_dict, image_path=image_path, vqa_model=vqa_model)
             local_scores.append(score)
             
             # summarize scores by categoris

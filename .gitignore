@@ -161,3 +161,4 @@ cython_debug/
 
 output/
 images/
+dpg_bench_*

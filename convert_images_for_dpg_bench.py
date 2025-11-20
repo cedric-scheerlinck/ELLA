@@ -5,6 +5,16 @@ from tqdm import tqdm
 import argh
 
 
+def get_filename_from_prompt(filename_from_prompt: dict, prompt_text: str) -> str | None:
+    result = None
+    for prompt_key, filename in filename_from_prompt.items():
+        if prompt_key.strip() in prompt_text.strip():
+            if result is not None:
+                raise ValueError(f"Multiple filenames found for prompt: {prompt_text}")
+            result = filename
+    return result
+
+
 def convert_images(input_dir: str, output_dir: str) -> None:
     """
     Convert images from sample directories to DPG-Bench format.
@@ -43,13 +53,13 @@ def convert_images(input_dir: str, output_dir: str) -> None:
             print(f"Error reading prompt.txt from {sample_dir.name}: {e}")
             error_count += 1
             continue        
-        if prompt_text not in filename_from_prompt:
-            print(f"Warning: No mapping found for prompt in {sample_dir.name}")
-            print(f"  Prompt preview: {prompt_text[:100]}...")
+        
+        filename = get_filename_from_prompt(filename_from_prompt, prompt_text)
+        dst_image_path = output_path / f"{filename}.png"
+
+        if dst_image_path.exists():
             skipped_count += 1
             continue
-        
-        dst_image_path = output_path / f"{filename_from_prompt[prompt_text]}.png"
         
         try:
             shutil.copy2(src_image_path, dst_image_path)
